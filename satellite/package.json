@@ -60,6 +60,7 @@
         "debounce-fn": "^6.0.0",
         "electron-about-window": "^1.15.2",
         "electron-store": "^10.0.0",
+        "electron-updater": "^6.3.9",
         "eventemitter3": "^5.0.1",
         "exit-hook": "^4.0.0",
         "infinitton-idisplay": "^1.2.0",
@@ -82,6 +83,11 @@
         ]
     },
     "build": {
+        "publish": {
+            "provider": "generic",
+            "publishAutoUpdate": false,
+            "url": "https://builds.julusian.dev/companion-satellite"
+        },
         "productName": "Companion Satellite",
         "appId": "remote.companion.bitfocus.no",
         "afterSign": "../tools/notarize.cjs",

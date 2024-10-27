@@ -15,12 +15,15 @@ import { SatelliteConfig, ensureFieldsPopulated } from './config.js'
 import { ApiConfigData, ApiStatusResponse, compileConfig, compileStatus, updateConfig } from './apiTypes.js'
 import { fileURLToPath } from 'url'
 import { MdnsAnnouncer } from './mdnsAnnouncer.js'
+import { ElectronUpdater } from './electronUpdater.js'
 
 const appConfig = new electronStore<SatelliteConfig>({
 	// schema: satelliteConfigSchema,
 	// migrations: satelliteConfigMigrations,
 })
 ensureFieldsPopulated(appConfig)
+
+const electronUpdater = new ElectronUpdater()
 
 let tray: Tray | undefined
 let configWindow: BrowserWindow | undefined
@@ -107,6 +110,8 @@ trayMenu.append(
 		},
 	}),
 )
+trayMenu.append(electronUpdater.menuItem)
+trayMenu.append(electronUpdater.installMenuItem)
 trayMenu.append(
 	new MenuItem({
 		label: 'About',
@@ -123,6 +128,8 @@ trayMenu.append(
 app.whenReady()
 	.then(async () => {
 		console.log('App ready')
+
+		electronUpdater.check()
 
 		tryConnect()
 		restartRestApi()
